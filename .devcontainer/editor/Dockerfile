@@ -7,6 +7,7 @@ ARG NODE_BUILDER_OS
 ARG NODE_BUILDER_ARCH
 EXPOSE 3000
 EXPOSE 3090
+EXPOSE 8080
 
 # install go
 RUN curl -L https://go.dev/dl/go${GO_VERSION}.${GO_BUILDER_OS}-${GO_BUILDER_ARCH}.tar.gz | tar xz -C /usr/local
