@@ -26,14 +26,14 @@ cd .devcontainer
 docker compose up -d
 ```
 
-After that, attach to the Docker container using Visual Studio Code and **"Dev Containers" extension** (not shell), and open `/project` directory.
+After that, attach to the Docker container using Visual Studio Code and **"Dev Containers" extension** (not shell), and open `/home/mochi/` directory.
 
 ### HTTP server
 
 Run the following commands using Visual Studio Code that is attaching to the Docker container.
 
 ```bash
-cd /project
+cd /home/mochi
 go mod tidy
 cd cmd/server
 go run main.go
@@ -44,7 +44,7 @@ go run main.go
 Run the following commands using Visual Studio Code that is attaching to the Docker container.
 
 ```bash
-cd /project/cmd/client
+cd /home/mochi/cmd/client
 npm ci
 npm run dev
 ```

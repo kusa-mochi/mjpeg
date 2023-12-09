@@ -16,6 +16,6 @@ services:
       - 4090:3090
       - 9080:8080
     volumes:
-      - ../:/project
-    working_dir: /project
+      - ../:/home/mochi
+    working_dir: /home/mochi
     tty: true
