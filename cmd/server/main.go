@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	mjpeg_handler "github.com/nsmith5/mjpeg/cmd/server/mjpeg"
+	"github.com/rs/cors"
 )
 
 func stream() (image.Image, error) {
@@ -32,5 +33,8 @@ func main() {
 
 	mux := http.NewServeMux()
 	mux.Handle("/stream", handler)
-	log.Fatal(http.ListenAndServe(":8080", mux))
+	c := cors.AllowAll()
+	corsHandler := c.Handler(mux)
+	log.Println("listening...")
+	log.Fatal(http.ListenAndServe(":8080", corsHandler))
 }
