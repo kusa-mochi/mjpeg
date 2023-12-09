@@ -53,7 +53,7 @@ Then open [http://localhost:4000](http://localhost:4000) using web browser (ex. 
 
 The streaming image with random dot pattern appear in the browser.
 
-### The sample to record the image
+To record the image, follow these steps:
 
 1. Push "Record" button, then the recording is started. The canvas element in HTML shows a recording frame.
 1. Push "Stop" button, then the recording is stopped.
