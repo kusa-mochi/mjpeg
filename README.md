@@ -1,44 +1,64 @@
-# Simple Motion JPEG Streaming
+# mjpeg
 
-| Docs   | Build |
-|:-------|:------|
-| [![GoDoc](https://godoc.org/github.com/nsmith5/mjpeg?status.svg)](https://godoc.org/github.com/nsmith5/mjpeg) | [![Build Status](https://cloud.drone.io/api/badges/nsmith5/mjpeg/status.svg)](https://cloud.drone.io/nsmith5/mjpeg) |
+MJPEG画像のストリーミング配信およびフロントエンドにおける録画処理のサンプル
 
-Super simple mjpeg streaming in Go.
+## ソフトウェア構成
 
-## Getting Started
+|構成|概要|開発環境|
+|:---|:---|:---|
+|HTTPサーバー|MJPEG画像のストリーミング配信のサンプル|Go言語（Dockerfileに含まれる）|
+|Webクライアント|MJPEG画像の録画処理のサンプル|npm+Next.js（Dockerfileに含まれる）|
 
-Get to package with `go get github.com/nsmith5/mjpeg`. An MJPeg stream
-can be built using any function that takes no arguments and returns an image.
+## 実行に必要な前提環境
 
-```go
-package main
+- Docker
+- Docker Compose
+- Visual Studio Code
+    - 拡張機能 "Docker"
+    - 拡張機能 "Dev Containers"
 
-import (
-    "log"
-    "net/http"
+## 実行手順
 
-    "github.com/nsmith5/mjpeg"
-)
+### 実行用Dockerコンテナの起動
 
-func main() {
-    stream := mjpeg.Handler{
-        Next: func()  (image.Image, error) {
-            img := image.NewGray(image.Rect(0, 0, 100, 100))
-            for i := 0; i < 100; i++ {
-                for j := 0; j < 100; j++ {
-                    n := rand.Intn(256)
-                    gray := color.Gray{uint8(n)}
-                    img.SetGray(i, j, gray)
-                }
-            }
-            return img, nil
-        },
-        Options: &jpeg.Options{Quality: 80},
-    }
-
-    mux := http.NewServeMux()
-    mux.Handle("/stream", stream)
-    log.Fatal(http.ListenAndServe(":8080", mux))
-}
+```pwsh
+cd .devcontainer
+docker compose up -d
 ```
+
+その後、Visual Studio Codeの拡張機能 "Dev Containers" を使って（Shellではなく）**Visual Studio Codeにより**コンテナにアタッチし、`/project`ディレクトリを開く。
+
+### HTTPサーバーの起動
+
+コンテナにアタッチしたVisual Studio Codeで次のコマンドを実行する。
+
+```bash
+cd /project
+go mod tidy
+cd cmd/server
+go run main.go
+```
+
+### Webクライアントの起動
+
+コンテナにアタッチしたVisual Studio Codeで次のコマンドを実行する。
+
+```bash
+cd /project/cmd/client
+npm ci
+npm run dev
+```
+
+Dockerホスト上でWebブラウザ（Chromeなど）から[http://localhost:4000](http://localhost:4000)にアクセスする。
+
+Webブラウザにランダムドットパターンのストリーミング画像が表示される。
+
+### 録画処理サンプルの操作
+
+1. Webクライアントの "Record" ボタンを押すと、ランダムドットパターンのストリーミング画像の録画が始まる。
+1. "Stop" ボタンを押すと、録画が終了する。
+1. "Download" リンクを踏むと、録画した画像をローカルにダウンロードできる。
+
+## 参考にしたリポジトリ
+
+[GitHub - nsmith5/mjpeg](https://github.com/nsmith5/mjpeg)
