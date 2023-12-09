@@ -1,36 +1,36 @@
 # mjpeg
 
-MJPEG画像のストリーミング配信およびフロントエンドにおける録画処理のサンプル
+The sample code to show how to stream MJPEG image & record it on a frontend.
 
-## ソフトウェア構成
+## Structure
 
-|構成|概要|開発環境|
+|Component|Summary|Dev environment|
 |:---|:---|:---|
-|HTTPサーバー|MJPEG画像のストリーミング配信のサンプル|Go言語（Dockerfileに含まれる）|
-|Webクライアント|MJPEG画像の録画処理のサンプル|npm+Next.js（Dockerfileに含まれる）|
+|HTTP server|The sample code to show how to stream MJPEG image|Golang (included in Dockerfile)|
+|Web client|The sample code to show how to record MJPEG image from a streming|npm+Next.js (included in Dockerfile)|
 
-## 実行に必要な前提環境
+##　Execution environment
 
 - Docker
 - Docker Compose
 - Visual Studio Code
-    - 拡張機能 "Docker"
-    - 拡張機能 "Dev Containers"
+    - "Docker" extension
+    - "Dev Containers" extension
 
-## 実行手順
+## How to run
 
-### 実行用Dockerコンテナの起動
+### Docker container to run the code
 
 ```pwsh
 cd .devcontainer
 docker compose up -d
 ```
 
-その後、Visual Studio Codeの拡張機能 "Dev Containers" を使って（Shellではなく）**Visual Studio Codeにより**コンテナにアタッチし、`/project`ディレクトリを開く。
+After that, attach to the Docker container using Visual Studio Code and **"Dev Containers" extension** (not shell), and open `/project` directory.
 
-### HTTPサーバーの起動
+### HTTP server
 
-コンテナにアタッチしたVisual Studio Codeで次のコマンドを実行する。
+Run the following commands using Visual Studio Code that is attaching to the Docker container.
 
 ```bash
 cd /project
@@ -39,9 +39,9 @@ cd cmd/server
 go run main.go
 ```
 
-### Webクライアントの起動
+### Web client
 
-コンテナにアタッチしたVisual Studio Codeで次のコマンドを実行する。
+Run the following commands using Visual Studio Code that is attaching to the Docker container.
 
 ```bash
 cd /project/cmd/client
@@ -49,16 +49,16 @@ npm ci
 npm run dev
 ```
 
-Dockerホスト上でWebブラウザ（Chromeなど）から[http://localhost:4000](http://localhost:4000)にアクセスする。
+Then open [http://localhost:4000](http://localhost:4000) using web browser (ex. Chrome) on the Docker host.
 
-Webブラウザにランダムドットパターンのストリーミング画像が表示される。
+The streaming image with random dot pattern appear in the browser.
 
-### 録画処理サンプルの操作
+### The sample to record the image
 
-1. Webクライアントの "Record" ボタンを押すと、ランダムドットパターンのストリーミング画像の録画が始まる。録画したフレームがHTMLのcanvas要素に描き出される。
-1. "Stop" ボタンを押すと、録画が終了する。
-1. "Download" リンクを踏むと、録画した画像をローカルにダウンロードできる。
+1. Push "Record" button, then the recording is started. The canvas element in HTML shows a recording frame.
+1. Push "Stop" button, then the recording is stopped.
+1. Click/Tap "Download" link, then you can get a recorded image to a local file.
 
-## MJPEG画像配信の参考にしたリポジトリ
+## Reference repository for MJPEG streaming
 
 [GitHub - nsmith5/mjpeg](https://github.com/nsmith5/mjpeg)
