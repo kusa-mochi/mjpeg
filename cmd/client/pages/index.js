@@ -2,18 +2,80 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
 import styles from '@/styles/Home.module.css'
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+  const imgRef = useRef(null)
   const canvasRef = useRef(null)
+  const [blobUrl, setBlobUrl] = useState("")
+  let chunks = []
+  let ctx = null
+  let intervalId = null
+  let recorder = null
+
+  // const draw = (ctx) => {
+  //   ctx.fillStyle = '#000000'
+  //   ctx.beginPath()
+  //   ctx.arc(50, 100, 20, 0,2*Math.PI)
+  //   ctx.fill()
+  // }
+
   useEffect(() => {
+    const canvas = canvasRef.current    
+    const stream = canvas.captureStream()
+    recorder = new MediaRecorder(stream, {
+      mimeType: 'video/webm'
+    })
+    recorder.ondataavailable = ({data}) => {
+      // const videoBlob = new Blob([e.data], {type: e.data.type})
+      // const blobUrl = window.URL.createObjectURL(videoBlob)
+      // console.log(blobUrl)
+      // setBlobUrl(blobUrl)
+      if (data.size > 0) {
+        chunks.push(data)
+        console.log("pushed data")
+        console.log(data)
+      } else {
+        console.log("no data")
+      }
+    }
+    recorder.onstop = () => {
+      const blob = new Blob(chunks)
+      const blobUrl = URL.createObjectURL(blob)
+      setBlobUrl(blobUrl)
+      // chunks = []
+    }
+    ctx = canvas.getContext('2d')
+
+    // context.fillStyle = '#000000'
+    // context.fillRect(0, 0, context.canvas.width, context.canvas.height)
+    // draw(context)
+  }, [/*draw*/])
+
+  function Record() {
     const canvas = canvasRef.current
-    const context = canvas.getContext('2d')
-    context.fillStyle = '#000000'
-    context.fillRect(0, 0, context.canvas.width, context.canvas.height)
-  }, [])
+    const img = imgRef.current
+    img.crossOrigin = "Anonymous"
+    // const context = canvas.getContext('2d')
+
+    canvas.width = img.width
+    canvas.height = img.height
+    intervalId = setInterval(() => {
+      console.log(img)
+      console.log(img.width)
+      console.log(img.height)
+      ctx.drawImage(img, 0, 0, img.width, img.height)
+    }, 1000/30)
+    recorder.start()
+  }
+
+  function Stop() {
+    clearInterval(intervalId)
+    recorder.stop()
+  }
+
   return (
     <>
       <Head>
@@ -23,17 +85,17 @@ export default function Home() {
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
         <div className={styles.grid}>
-          <img id="sample-video" src="http://localhost:9080/stream" />
+          <img ref={imgRef} src="http://localhost:9080/stream" />
         </div>
         <div className={styles.grid}>
           <canvas ref={canvasRef}></canvas>
         </div>
         <div>
-          <button>Record</button>
-          <button>Stop</button>
+          <button onClick={Record}>Record</button>
+          <button onClick={Stop}>Stop</button>
         </div>
         <div>
-          <a href="#" id="download-link">Download</a>
+          <a href={blobUrl} download="sample.webm">Download</a>
         </div>
       </main>
     </>

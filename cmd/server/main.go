@@ -7,6 +7,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"time"
 
 	mjpeg_handler "github.com/nsmith5/mjpeg/cmd/server/mjpeg"
 	"github.com/rs/cors"
@@ -20,6 +21,7 @@ func stream() (image.Image, error) {
 			gray := color.Gray{uint8(n)}
 			img.SetGray(i, j, gray)
 		}
+		time.Sleep(1 * time.Millisecond)
 	}
 
 	return img, nil
