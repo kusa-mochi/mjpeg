@@ -9,7 +9,7 @@ The sample code to show how to stream MJPEG image & record it on a frontend.
 |HTTP server|The sample code to show how to stream MJPEG image|Golang (included in Dockerfile)|
 |Web client|The sample code to show how to record MJPEG image from a streming|npm+Next.js (included in Dockerfile)|
 
-##　Execution environment
+## Execution environment
 
 - Docker
 - Docker Compose
