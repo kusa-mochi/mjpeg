@@ -15,13 +15,6 @@ export default function Home() {
   let intervalId = null
   let recorder = null
 
-  // const draw = (ctx) => {
-  //   ctx.fillStyle = '#000000'
-  //   ctx.beginPath()
-  //   ctx.arc(50, 100, 20, 0,2*Math.PI)
-  //   ctx.fill()
-  // }
-
   useEffect(() => {
     const canvas = canvasRef.current    
     const stream = canvas.captureStream()
@@ -29,10 +22,6 @@ export default function Home() {
       mimeType: 'video/webm'
     })
     recorder.ondataavailable = ({data}) => {
-      // const videoBlob = new Blob([e.data], {type: e.data.type})
-      // const blobUrl = window.URL.createObjectURL(videoBlob)
-      // console.log(blobUrl)
-      // setBlobUrl(blobUrl)
       if (data.size > 0) {
         chunks.push(data)
         console.log("pushed data")
@@ -45,20 +34,15 @@ export default function Home() {
       const blob = new Blob(chunks)
       const blobUrl = URL.createObjectURL(blob)
       setBlobUrl(blobUrl)
-      // chunks = []
+      chunks = []
     }
     ctx = canvas.getContext('2d')
-
-    // context.fillStyle = '#000000'
-    // context.fillRect(0, 0, context.canvas.width, context.canvas.height)
-    // draw(context)
-  }, [/*draw*/])
+  }, [])
 
   function Record() {
     const canvas = canvasRef.current
     const img = imgRef.current
     img.crossOrigin = "Anonymous"
-    // const context = canvas.getContext('2d')
 
     canvas.width = img.width
     canvas.height = img.height
