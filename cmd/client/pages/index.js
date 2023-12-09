@@ -47,9 +47,6 @@ export default function Home() {
     canvas.width = img.width
     canvas.height = img.height
     intervalId = setInterval(() => {
-      console.log(img)
-      console.log(img.width)
-      console.log(img.height)
       ctx.drawImage(img, 0, 0, img.width, img.height)
     }, 1000/30)
     recorder.start()
