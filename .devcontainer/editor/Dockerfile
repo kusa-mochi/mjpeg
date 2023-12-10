@@ -30,10 +30,16 @@ RUN npm i -g @bufbuild/buf @connectrpc/protoc-gen-connect-es @bufbuild/protoc-ge
     npm i -g @connectrpc/connect @connectrpc/connect-web @bufbuild/protobuf
 ENV PATH $PATH:/usr/local/bin/
 
+# create dev user
+RUN groupadd -g 1200 mochi && \
+    useradd -m -s /bin/bash -u 1200 -g 1200 mochi
+
+USER mochi
+
 ENV LANG C.UTF-8
 ENV LANGUAGE C.UTF-8
 ENV LC_ALL C.UTF-8
 ENV DEBUG_COLORS true
 ENV FORCE_COLOR true
 
-WORKDIR /project
+WORKDIR /home/mochi/

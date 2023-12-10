@@ -1,44 +1,64 @@
-# Simple Motion JPEG Streaming
+# mjpeg
 
-| Docs   | Build |
-|:-------|:------|
-| [![GoDoc](https://godoc.org/github.com/nsmith5/mjpeg?status.svg)](https://godoc.org/github.com/nsmith5/mjpeg) | [![Build Status](https://cloud.drone.io/api/badges/nsmith5/mjpeg/status.svg)](https://cloud.drone.io/nsmith5/mjpeg) |
+The sample code to show how to stream MJPEG image & record it on a frontend.
 
-Super simple mjpeg streaming in Go.
+## Structure
 
-## Getting Started
+|Component|Summary|Dev environment|
+|:---|:---|:---|
+|HTTP server|The sample code to show how to stream MJPEG image|Golang (included in Dockerfile)|
+|Web client|The sample code to show how to record MJPEG image from a streming|npm+Next.js (included in Dockerfile)|
 
-Get to package with `go get github.com/nsmith5/mjpeg`. An MJPeg stream
-can be built using any function that takes no arguments and returns an image.
+## Execution environment
 
-```go
-package main
+- Docker
+- Docker Compose
+- Visual Studio Code
+    - "Docker" extension
+    - "Dev Containers" extension
 
-import (
-    "log"
-    "net/http"
+## How to run
 
-    "github.com/nsmith5/mjpeg"
-)
+### Docker container to run the code
 
-func main() {
-    stream := mjpeg.Handler{
-        Next: func()  (image.Image, error) {
-            img := image.NewGray(image.Rect(0, 0, 100, 100))
-            for i := 0; i < 100; i++ {
-                for j := 0; j < 100; j++ {
-                    n := rand.Intn(256)
-                    gray := color.Gray{uint8(n)}
-                    img.SetGray(i, j, gray)
-                }
-            }
-            return img, nil
-        },
-        Options: &jpeg.Options{Quality: 80},
-    }
-
-    mux := http.NewServeMux()
-    mux.Handle("/stream", stream)
-    log.Fatal(http.ListenAndServe(":8080", mux))
-}
+```pwsh
+cd .devcontainer
+docker compose up -d
 ```
+
+After that, attach to the Docker container using Visual Studio Code and **"Dev Containers" extension** (not shell), and open `/home/mochi/` directory.
+
+### HTTP server
+
+Run the following commands using Visual Studio Code that is attaching to the Docker container.
+
+```bash
+cd /home/mochi
+go mod tidy
+cd cmd/server
+go run main.go
+```
+
+### Web client
+
+Run the following commands using Visual Studio Code that is attaching to the Docker container.
+
+```bash
+cd /home/mochi/cmd/client
+npm ci
+npm run dev
+```
+
+Then open [http://localhost:4000](http://localhost:4000) using web browser (ex. Chrome) on the Docker host.
+
+The streaming image with random dot pattern appear in the browser.
+
+To record the image, follow these steps:
+
+1. Push "Record" button, then the recording is started. The canvas element in HTML shows a recording frame.
+1. Push "Stop" button, then the recording is stopped.
+1. Click/Tap "Download" link, then you can get a recorded image to a local file.
+
+## Reference repository for MJPEG streaming
+
+[GitHub - nsmith5/mjpeg](https://github.com/nsmith5/mjpeg)
