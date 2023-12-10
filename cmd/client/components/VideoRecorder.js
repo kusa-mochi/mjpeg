@@ -1,8 +1,14 @@
 import { useEffect, useRef, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { store } from "@/lib/store"
 
 let isVideoRecorderInitialized = false
 
 export default function VideoRecorder(props) {
+
+    // store
+    const dispatch = useDispatch()
+    const recorder = useSelector((store) => store.recorder)
 
     // ref
     const imgRef = useRef(null)
@@ -10,10 +16,10 @@ export default function VideoRecorder(props) {
 
     // state
     const [blobUrl, setBlobUrl] = useState('')
-    const [isRecordButtonEnabled, setIsRecordButtonEnabled] = useState(false)
+    const [isRecordButtonEnabled, setIsRecordButtonEnabled] = useState(true)
     const [isStopButtonEnabled, setIsStopButtonEnabled] = useState(false)
     const [isDownloadLinkVisible, setIsDownloadLinkVisible] = useState(false)
-    const [recorder, setRecorder] = useState(null)
+    // const [recorder, setRecorder] = useState(null)
 
     // var
     let chunks = []
@@ -72,17 +78,19 @@ export default function VideoRecorder(props) {
     useEffect(() => {
         console.log('hogehoge')
         console.log(recorder)
-        if (!isVideoRecorderInitialized === false) {
+        // if (!isVideoRecorderInitialized === false) {
             const canvas = canvasRef.current
             const stream = canvas.captureStream()
+            dispatch()
+            // recorder = useSelector((store) => store.recorder)
             // recorder = new MediaRecorder(stream, {mimeType: 'video/webm'})
-            setRecorder(new MediaRecorder(stream, {mimeType: 'video/webm'}))
+            // setRecorder(new MediaRecorder(stream, {mimeType: 'video/webm'}))
             recorder.ondataavailable = OnDataAvailable
             recorder.onstop = OnStop
             ctx = canvas.getContext('2d')
             UpdateState(true, false, false)
-            isVideoRecorderInitialized = true    
-        }
+            // isVideoRecorderInitialized = true    
+        // }
         console.log(recorder)
     }, [])
 
